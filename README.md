@@ -10,7 +10,7 @@ It uses [ethereumjs-wallet](https://github.com/axic/ethereumjs-wallet) and [ethe
 ## Installation
 With Node installed:
 Clone this repository: `git clone https://github.com/ethereumjs/helpeth`
-Switch to the directory `cd helpeth'
+Switch to the directory `cd helpeth`
 Enter commands:
 `node helpeth --help`
 `node helpeth parseTx 0xf8900b8504a817c800830f424094394b88b676f289224bdc332f361be399ea064bd587060a24181e4000a4a358c2fa841a3c2efd182abc0a149b32a493044d84aa6c0d4ebe34e0f1b9e96403db65da2aa0a2b453bcade87566a292462a6e4de82615508de982936799642dba9e959b1ac3a0364eee7341bf901182e59c1b7492b03e55163703435fc8a1f199fcf30d50ab`
