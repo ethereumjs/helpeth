@@ -46,8 +46,8 @@ var yargs = require('yargs')
   .command('signMessage <message>', 'Sign a message')
   .command('verifySig <hash> <sig>', 'Verify signature')
   .command('verifySigParams <hash> <r> <s> <v>', 'Verify signature parameters')
-  .command('createTx <nonce> <to> <value> <data> <gasLimit> <gasPrice>', 'Sign a transaction')
-  .command('assembleTx <nonce> <to> <value> <data> <gasLimit> <gasPrice> <v> <r> <s>', 'Assemble a transaction from its components')
+  .command('createTx <chainId> <nonce> <to> <value> <data> <gasLimit> <gasPrice>', 'Sign a transaction')
+  .command('assembleTx <chainId> <nonce> <to> <value> <data> <gasLimit> <gasPrice> <v> <r> <s>', 'Assemble a transaction from its components')
   .command('parseTx <tx>', 'Parse raw transaction')
   .command('keyGenerate [format] [icapdirect]', 'Generate new key')
   .command('keyConvert', 'Convert a key to V3 keystore format')
@@ -263,6 +263,7 @@ switch (command) {
 
   case 'createTx':
     // FIXME: validate inputs
+    var chainId = shadyparser(argv.chainId)
     var nonce = shadyparser(argv.nonce)
     var to = shadyparser(argv.to)
     var value = shadyparser(convertValue(argv.value))
@@ -270,6 +271,7 @@ switch (command) {
     var gasLimit = shadyparser(argv.gasLimit)
     var gasPrice = shadyparser(convertValue(argv.gasPrice))
 
+    console.log('Chain: ' + chainId)
     console.log('Nonce: ' + nonce)
     console.log('To: ' + to)
     console.log('Value: ' + value)
@@ -279,12 +281,13 @@ switch (command) {
 
     /* eslint-disable new-cap */
     var tx = new ethTx({
+      chainId: chainId,
       nonce: nonce,
       to: to,
       value: value,
       data: data,
       gasLimit: gasLimit,
-      gasPrice: gasPrice
+      gasPrice: gasPrice,
     })
     /* eslint-enable new-cap */
 
@@ -298,6 +301,7 @@ switch (command) {
 
   case 'assembleTx':
     // FIXME: validate inputs
+    var chainId = shadyparser(argv.chainId)
     var nonce = shadyparser(argv.nonce)
     var to = shadyparser(argv.to)
     var value = shadyparser(convertValue(argv.value))
@@ -308,6 +312,7 @@ switch (command) {
     var r = shadyparser(argv.r)
     var s = shadyparser(argv.s)
 
+    console.log('Chain: ' + chainId)
     console.log('Nonce: ' + nonce)
     console.log('To: ' + to)
     console.log('Value: ' + value)
@@ -320,6 +325,7 @@ switch (command) {
 
     /* eslint-disable new-cap */
     var tx = new fakeEthTx({
+      chainId: chainId,
       nonce: nonce,
       to: to,
       value: value,
@@ -346,6 +352,7 @@ switch (command) {
     /* eslint-enable new-cap */
 
     console.log('Signed by: ' + ethUtil.bufferToHex(tx.from))
+    console.log('Chain: ' + ethUtil.bufferToHex(tx.getChainId()))
     console.log('Nonce: ' + ethUtil.bufferToHex(tx.nonce))
     console.log('To: ' + ethUtil.bufferToHex(tx.to))
     console.log('Value: ' + value + ' (' + ethUnits.convert(value, 'wei', 'eth') + ' ETH)')

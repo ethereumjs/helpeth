@@ -21,20 +21,27 @@ See the help output with `helpeth --help`:
 Usage: helpeth [command]
 
 Commands:
-  signMessage <message>                     Sign a message
-  verifySig <hash> <sig>                    Verify signature
-  verifySigParams <hash> <r> <s> <v>        Verify signature parameters
-  createTx <nonce> <to> <value> <data>      Sign a transaction
-  <gasLimit> <gasPrice>
-  assembleTx <nonce> <to> <value> <data>    Assemble a transaction from its
-  <gasLimit> <gasPrice> <v> <r> <s>         components
-  parseTx <tx>                              Parse raw transaction
-  keyGenerate [format] [icapdirect]         Generate new key
-  keyConvert                                Convert a key to V3 keystore format
-  keyDetails                                Print key details
-  bip32Details <path>                       Print key details for a given path
-  addressDetails <address>                  Print details about an address
-  unitConvert <value> <from> <to>           Convert between Ethereum units
+  helpeth signMessage <message>             Sign a message
+  helpeth verifySig <hash> <sig>            Verify signature
+  helpeth verifySigParams <hash> <r> <s>    Verify signature parameters
+  <v>
+  helpeth createTx <chainId> <nonce> <to>   Sign a transaction
+  <value> <data> <gasLimit> <gasPrice>
+  helpeth assembleTx <chainId> <nonce>      Assemble a transaction from its
+  <to> <value> <data> <gasLimit>            components
+  <gasPrice> <v> <r> <s>
+  helpeth parseTx <tx>                      Parse raw transaction
+  helpeth keyGenerate [format]              Generate new key
+  [icapdirect]
+  helpeth keyConvert                        Convert a key to V3 keystore format
+  helpeth keyDetails                        Print key details
+  helpeth vanityKeyGenerate <pattern>       Generate vanity key
+  helpeth bip32Details <path>               Print key details for a given path
+  helpeth addressDetails <address>          Print details about an address
+  helpeth unitConvert <value> <from> <to>   Convert between Ethereum units
+  helpeth rlpInspect <rlp>                  Inspect RLP encoded data
+  helpeth keccak256 <data>                  Create Keccak-256 hash of the
+                                            supplied data
 
 Options:
   -p, --private      Private key as a hex string                        [string]
@@ -94,14 +101,17 @@ The signature: 0x167760997a69e225c0668e6761cd20cac70f3a6ace29fe2d287c3003daf6972
 ### Sign a transaction
 
 ```
-$ helpeth --password 'Use --password-prompt instead for security' --keyfile UTC--2016-03-17T19-06-57.064Z--15f2f3e0f2d74ea7b185fc12f24cb4f402cc96d0 createTx 0x1 0xe0defb92145fef3c3a945637705fafd3aa74a241 "1 eth" 0x0 21000 "20 Gwei"
+$ helpeth --password 'Use --password-prompt instead for security' --keyfile UTC--2016-03-17T19-06-57.064Z--15f2f3e0f2d74ea7b185fc12f24cb4f402cc96d0 createTx 1 0x1 0xe0defb92145fef3c3a945637705fafd3aa74a241 "1 eth" 0x0 21000 "20 Gwei"
+Chain: 0x1
 Nonce: 0x1
 To: 0xe0defb92145fef3c3a945637705fafd3aa74a241
 Value: 0xde0b6b3a7640000
 Data: 0x0
 Gas limit: 0x5208
 Gas price: 0x4a817c800
-The signed transaction: 0xf86c018504a817c80082520894e0defb92145fef3c3a945637705fafd3aa74a241880de0b6b3a7640000001ba01893f2731799dc436da31e092f75bece7bfbdb4942b60b106d61ec06f143aed2a075548818010ccd7fd3e3dd6172f072d4dec19c8956c735bdd34b4aea809ff6be
+Potential total transaction cost: 0.00042 ETH
+Minimum required account balance: 1.00042 ETH
+The signed transaction: 0xf86c018504a817c80082520894e0defb92145fef3c3a945637705fafd3aa74a241880de0b6b3a76400000025a0ea6dabbd159bc008060de4b8441cdaf6d5efd370a4e65ea97e50e2e2fa7ee45aa03a9543e6b3073abe762fa071b6fa0d0fe3ebf6cca6f0393122202357ef335aac
 ```
 
 ### Parse a transaction
@@ -109,12 +119,15 @@ The signed transaction: 0xf86c018504a817c80082520894e0defb92145fef3c3a945637705f
 ```
 $ ./helpeth parseTx 0xf86c018504a817c80082520894e0defb92145fef3c3a945637705fafd3aa74a241880de0b6b3a7640000001ba01893f2731799dc436da31e092f75bece7bfbdb4942b60b106d61ec06f143aed2a075548818010ccd7fd3e3dd6172f072d4dec19c8956c735bdd34b4aea809ff6be
 Signed by: 0x15f2f3e0f2d74ea7b185fc12f24cb4f402cc96d0
+Chain: 0x01
 Nonce: 0x01
 To: 0xe0defb92145fef3c3a945637705fafd3aa74a241
 Value: 1000000000000000000 (1 ETH)
 Data: 0x00
 Gas limit: 21000
 Gas price: 20000000000 (20 Gwei)
+Potential total transaction cost: 0.00042 ETH
+Minimum required account balance: 1.00042 ETH
 ```
 
 ## License

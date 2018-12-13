@@ -81,7 +81,7 @@ tape('CLI', function (t) {
   })
 
   t.test('create transaction', function (st) {
-    var spt = spawn(st, './helpeth --private 0x0d86ae57f5b60057ecafdbb4b30d2d29bc5d5701db0d357db68683f83607e7b4 createTx 1 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005 1234 0x11223344 1000 6000')
+    var spt = spawn(st, './helpeth --private 0x0d86ae57f5b60057ecafdbb4b30d2d29bc5d5701db0d357db68683f83607e7b4 createTx 0 1 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005 1234 0x11223344 1000 6000')
     spt.stderr.empty()
     spt.stdout.match(/The signed transaction: 0xf867018217708203e894b07b59fe13ee751cc52814b23491ecbf4fbbb0058204d284112233441ba05d7dd00fd2403f54f56601f31abbe5177a67ab831dacb3db15fe38d62d63a987a06c74dcd555b19130b102afbcc209263aec9d118b8229040f25a9eb79d60702d3/)
     spt.end()
@@ -91,6 +91,30 @@ tape('CLI', function (t) {
     var spt = spawn(st, './helpeth parseTx 0xf867018217708203e894b07b59fe13ee751cc52814b23491ecbf4fbbb0058204d284112233441ba05d7dd00fd2403f54f56601f31abbe5177a67ab831dacb3db15fe38d62d63a987a06c74dcd555b19130b102afbcc209263aec9d118b8229040f25a9eb79d60702d3')
     spt.stderr.empty()
     spt.stdout.match(/Signed by: 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005/)
+    spt.stdout.match(/Chain: 0x00/)
+    spt.stdout.match(/Nonce: 0x01/)
+    spt.stdout.match(/To: 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005/)
+    spt.stdout.match(/Value: 1234 \(0.000000000000001234 ETH\)/)
+    spt.stdout.match(/Data: 0x11223344/)
+    spt.stdout.match(/Gas limit: 1000/)
+    spt.stdout.match(/Gas price: 6000 \(0.000006 Gwei\)/)
+    spt.stdout.match(/Potential total transaction cost: 0.000000000006 ETH/)
+    spt.stdout.match(/Minimum required account balance: 0.000000000006001234 ETH/)
+    spt.end()
+  })
+
+  t.test('create transaction (with chainid=1)', function (st) {
+    var spt = spawn(st, './helpeth --private 0x0d86ae57f5b60057ecafdbb4b30d2d29bc5d5701db0d357db68683f83607e7b4 createTx 1 1 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005 1234 0x11223344 1000 6000')
+    spt.stderr.empty()
+    spt.stdout.match(/The signed transaction: 0xf867018217708203e894b07b59fe13ee751cc52814b23491ecbf4fbbb0058204d2841122334426a08220bde0b57021e4d66297bea29c1c7ea610e5e46a5ef3308a817eafe5525b38a0482167879e89a9610bd62cea138b653382ef791d80b51ab4ee836ee76a1d4823/)
+    spt.end()
+  })
+
+  t.test('parse transaction (with chainid=1)', function (st) {
+    var spt = spawn(st, './helpeth parseTx 0xf867018217708203e894b07b59fe13ee751cc52814b23491ecbf4fbbb0058204d2841122334426a08220bde0b57021e4d66297bea29c1c7ea610e5e46a5ef3308a817eafe5525b38a0482167879e89a9610bd62cea138b653382ef791d80b51ab4ee836ee76a1d4823')
+    spt.stderr.empty()
+    spt.stdout.match(/Signed by: 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005/)
+    spt.stdout.match(/Chain: 0x01/)
     spt.stdout.match(/Nonce: 0x01/)
     spt.stdout.match(/To: 0xb07b59fe13ee751cc52814b23491ecbf4fbbb005/)
     spt.stdout.match(/Value: 1234 \(0.000000000000001234 ETH\)/)
