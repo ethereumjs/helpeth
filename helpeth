@@ -294,6 +294,11 @@ switch (command) {
     printMaxCost(tx)
 
     console.log('The signed transaction: ' + ethUtil.bufferToHex(tx.serialize()))
+
+    var errorMsg = tx.validate(true)
+    if (errorMsg !== '') {
+      console.log('The transaction doesn\'t seem to be valid: ' + errorMsg)
+    }
     break
 
   case 'assembleTx':
@@ -335,6 +340,11 @@ switch (command) {
     printMaxCost(tx)
 
     console.log('The signed transaction: ' + ethUtil.bufferToHex(tx.serialize()))
+
+    errorMsg = tx.validate(true)
+    if (errorMsg !== '') {
+      console.log('The transaction doesn\'t seem to be valid: ' + errorMsg)
+    }
     break
 
   case 'parseTx':
@@ -354,6 +364,11 @@ switch (command) {
     console.log('Gas price: ' + gasPrice + ' (' + ethUnits.convert(gasPrice, 'wei', 'gwei') + ' Gwei)')
 
     printMaxCost(tx)
+
+    errorMsg = tx.validate(true)
+    if (errorMsg !== '') {
+      console.log('The transaction doesn\'t seem to be valid: ' + errorMsg)
+    }
     break
 
   case 'addressDetails':
